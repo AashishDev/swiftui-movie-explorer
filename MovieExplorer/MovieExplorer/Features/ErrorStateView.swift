@@ -14,17 +14,17 @@ struct ErrorStateView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            Image(systemName: "exclamationmark.triangle")
+            Image(systemName: UIConstants.Images.errorIcon)
                 .font(.largeTitle)
 
-            Text("Unable to Load Movies")
+            Text(UIConstants.ErrorState.noMovies)
                 .font(.headline)
 
             Text(message)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
 
-            Button("Retry", action: retryAction)
+            Button(UIConstants.Button.retry, action: retryAction)
                 .buttonStyle(.borderedProminent)
         }
         .padding()

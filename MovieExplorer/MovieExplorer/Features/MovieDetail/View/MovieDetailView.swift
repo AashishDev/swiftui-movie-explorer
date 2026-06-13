@@ -12,7 +12,7 @@ struct MovieDetailView: View {
     var body: some View {
 
         content
-            .navigationTitle("Movie Details")
+            .navigationTitle(UIConstants.Title.movieDetail)
             .task {
                 guard viewModel.state == .idle else { return}
                 await viewModel.load()
@@ -43,7 +43,7 @@ struct MovieDetailView: View {
                     )
                 )
 
-                Section("Overview") {
+                Section("Description") {
                     Text(movie.description)
                 }
             }

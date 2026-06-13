@@ -15,7 +15,7 @@ struct MovieListView: View {
         
         NavigationStack(path:$router.path) {
             content
-                .navigationTitle("Movies")
+                .navigationTitle(UIConstants.Title.movies)
                 .navigationDestination(for:AppRoute.self) { route in
                     switch route {
                     case .movieDetails(let movieId):
@@ -46,12 +46,10 @@ struct MovieListView: View {
         switch viewModel.state {
             
         case .idle, .loading:
-            ProgressView("Loading Movies...")
+            ProgressView(UIConstants.ProgressView.msg)
             
         case .loaded(let movies):
-            
             ScrollView {
-                
                 VStack(alignment: .leading, spacing: 16) {
                     // Recently Viewed items [From Swift data]
                     if !viewModel.recentlyViewed.isEmpty {
@@ -75,13 +73,11 @@ struct MovieListView: View {
     }
     
     // MARK: - Recently Viewed Section
-    
     private var recentlyViewedSection: some View {
         
         VStack(alignment: .leading, spacing: 8) {
-            
             HStack {
-                Text("Recently Viewed")
+                Text(UIConstants.Title.recentlyViewed)
                     .font(.headline)
                 Spacer()
                 
@@ -90,7 +86,7 @@ struct MovieListView: View {
                         await viewModel.clearRecentlyViewed()
                     }
                 } label: {
-                    Image(systemName: "trash")
+                    Image(systemName: UIConstants.Images.deleteIcon)
                         .foregroundColor(.red)
                 }
             }
@@ -125,7 +121,7 @@ struct MovieListView: View {
         
         VStack(alignment: .leading, spacing: 8) {
             
-            Text("Popular Movies")
+            Text(UIConstants.Title.popularMovies)
                 .font(.headline)
                 .padding(.horizontal)
             
@@ -141,7 +137,6 @@ struct MovieListView: View {
                 Divider()
             }
         }
-        
     }
 }
 
