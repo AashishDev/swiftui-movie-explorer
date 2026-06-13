@@ -8,5 +8,5 @@
 import Foundation
 
 enum AppRoute:Hashable {
-    case movieDetails(id: Int)
+    case movieDetails(_ id: Int)
 }

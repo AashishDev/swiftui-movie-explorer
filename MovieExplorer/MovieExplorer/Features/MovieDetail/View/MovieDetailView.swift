@@ -4,12 +4,67 @@
 //
 //  Created by Aashish Tyagi on 6/13/26.
 //
-
 import SwiftUI
 
 struct MovieDetailView: View {
-    let movieId: Int
+    @State var viewModel: MovieDetailViewModel
+
     var body: some View {
-        Text("Details View \(movieId)")
+
+        content
+            .navigationTitle("Movie Details")
+            .task {
+
+                guard viewModel.state == .idle else {
+                    return
+                }
+
+                await viewModel.load()
+            }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+
+        switch viewModel.state {
+
+        case .idle,
+             .loading:
+
+            ProgressView()
+
+        case .loaded(let movie):
+
+            List {
+
+                LabeledContent(
+                    "Title",
+                    value: movie.title
+                )
+
+                LabeledContent(
+                    "Rating",
+                    value: String(
+                        format: "%.1f",
+                        movie.rating
+                    )
+                )
+
+                Section("Overview") {
+
+                    Text(movie.description)
+                }
+            }
+
+        case .error(let error):
+
+            ErrorStateView(
+                message: error.message
+            ) {
+                Task {
+                    await viewModel.load()
+                }
+            }
+        }
     }
 }

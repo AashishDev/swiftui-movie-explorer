@@ -6,11 +6,21 @@
 //
 
 protocol MovieDetailUseCaseProtocol {
-    func getDetail(for id:Int) -> MovieDetailDTO
+    func getDetail(for id:Int) async throws -> MovieDetail
 }
 
 final class MovieDetailUseCase: MovieDetailUseCaseProtocol {
-    func getDetail(for id: Int) -> MovieDetailDTO {
-        return .init(id: 1, title: "a title", overview: "a description", posterPath: "a posterPath")
+    private let repository: MovieDetailRepositoryProtocol
+    
+    init(repository: MovieDetailRepositoryProtocol) {
+        self.repository = repository
+    }
+    
+    func getDetail(for id: Int)  async throws -> MovieDetail {
+        try Task.checkCancellation()
+        
+        return try await repository.fetchDetail(
+            for: id
+        )
     }
 }

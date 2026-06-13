@@ -35,8 +35,27 @@ final class AppContainer {
         )
     }
     
-    
     func makeMovieDetailViewModel(for movieId:Int) -> MovieDetailViewModel {
-        MovieDetailViewModel(useCase: MovieDetailUseCase())
+        
+        let apiService = APIServiceLogger(
+            decoratee: APIService()
+        )
+        
+        let dataSource = RemoteMovieDetailDataSource(
+            service: apiService
+        )
+        
+        let repository = MovieDetailRepository(
+            dataSource: dataSource
+        )
+        
+        let useCase = MovieDetailUseCase(
+            repository: repository
+        )
+        
+        return MovieDetailViewModel(
+            movieId: movieId,
+            fetchMovieDetailUseCase: useCase
+        )
     }
 }

@@ -19,7 +19,8 @@ struct MovieListView: View {
                 .navigationDestination(for:AppRoute.self) { route in
                     switch route {
                     case .movieDetails(let movieId):
-                        MovieDetailView(movieId: movieId)
+                        MovieDetailView(
+                            viewModel:container.makeMovieDetailViewModel(for: movieId))
                     }
                 }
         }
@@ -42,7 +43,9 @@ struct MovieListView: View {
             
         case .loaded(let movies):
             List(movies) { movie in
-                NavigationLink(destination: Text("DetailView")) {
+                Button {
+                    container.router.push(.movieDetails(movie.id))
+                } label: {
                     MovieCellView(movie: movie)
                 }
             }
