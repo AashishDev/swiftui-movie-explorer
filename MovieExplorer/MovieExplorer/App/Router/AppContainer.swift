@@ -8,14 +8,16 @@
 //Composition Root
 final class AppContainer {
     
-    func makeMovieListViewModel() -> MovieListViewModel {
-        
-        let service =  APIServiceLogger(
+    private lazy var apiService: APIServiceProtocol = {
+        APIServiceLogger(
             decoratee: APIService()
         )
-        
+    }()
+    
+    func makeMovieListViewModel() -> MovieListViewModel {
+
         let dataSource = MovieRemoteDataSource(
-            service: service
+            service: apiService
         )
         
         let repository = MovieListRepository(
