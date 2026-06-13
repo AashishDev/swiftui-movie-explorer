@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Environment {
+enum AppEnvironment {
     
     static var apiKey:String {
        guard let value = Bundle.main.object(

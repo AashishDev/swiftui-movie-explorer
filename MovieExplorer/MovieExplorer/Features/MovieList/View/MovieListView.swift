@@ -7,14 +7,21 @@
 import SwiftUI
 
 struct MovieListView: View {
-    
     @State var viewModel: MovieListViewModel
+    @Environment(AppContainer.self) private var container
     
     var body: some View {
+        @Bindable var router = container.router
         
-        NavigationStack {
+        NavigationStack(path:$router.path) {
             content
                 .navigationTitle("Movies")
+                .navigationDestination(for:AppRoute.self) { route in
+                    switch route {
+                    case .movieDetails(let movieId):
+                        MovieDetailView(movieId: movieId)
+                    }
+                }
         }
         .refreshable {
             await viewModel.refresh()
@@ -45,7 +52,7 @@ struct MovieListView: View {
                 Task {
                     await viewModel.load()
                 }
-              }
+            }
             )
         }
     }

@@ -27,14 +27,14 @@ enum MovieEndPoint {
         return [
             URLQueryItem(
                 name: "api_key",
-                value: Environment.apiKey
+                value: AppEnvironment.apiKey
             )
         ]
     }
     
     func makeRequest() throws -> URLRequest {
         
-        var components =  URLComponents(url:Environment.baseURL!,
+        var components =  URLComponents(url:AppEnvironment.baseURL!,
                                         resolvingAgainstBaseURL:false)
         switch self {
         case .popularMovies:

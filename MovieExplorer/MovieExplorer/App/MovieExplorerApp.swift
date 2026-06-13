@@ -9,12 +9,14 @@ import SwiftUI
 
 @main
 struct MovieExplorerApp: App {
+    @State private var container = AppContainer()
     
     var body: some Scene {
         WindowGroup {
             MovieListView(
-                viewModel: AppContainer().makeMovieListViewModel()
+                viewModel: container.makeMovieListViewModel()
             )
+            .environment(container)
         }
     }
 }

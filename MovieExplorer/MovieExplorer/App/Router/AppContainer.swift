@@ -5,17 +5,19 @@
 //  Created by Aashish Tyagi on 6/13/26.
 //
 
-//Composition Root
+import Foundation
+
+@MainActor
+@Observable
 final class AppContainer {
-    
-    private lazy var apiService: APIServiceProtocol = {
-        APIServiceLogger(
-            decoratee: APIService()
-        )
-    }()
+    let router = Router()
     
     func makeMovieListViewModel() -> MovieListViewModel {
-
+        
+        let apiService = APIServiceLogger(
+            decoratee: APIService()
+        )
+        
         let dataSource = MovieRemoteDataSource(
             service: apiService
         )
@@ -29,7 +31,12 @@ final class AppContainer {
         )
         
         return MovieListViewModel(
-            fetchMoviesUseCase: useCase
+            useCase: useCase
         )
+    }
+    
+    
+    func makeMovieDetailViewModel(for movieId:Int) -> MovieDetailViewModel {
+        MovieDetailViewModel(useCase: MovieDetailUseCase())
     }
 }

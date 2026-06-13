@@ -5,7 +5,7 @@
 //  Created by Aashish Tyagi on 6/13/26.
 //
 
-import SwiftUI
+import Observation
 
 enum MovieListState:Equatable {
     case idle
@@ -21,16 +21,15 @@ final class MovieListViewModel {
     private(set) var state: MovieListState = .idle
     var isRefreshing = false
     
-    private let fetchMoviesUseCase: FetchMoviesUseCase
-    init(fetchMoviesUseCase: FetchMoviesUseCase) {
-        self.fetchMoviesUseCase = fetchMoviesUseCase
+    private let useCase: FetchMoviesUseCase
+    init(useCase: FetchMoviesUseCase) {
+        self.useCase = useCase
     }
     
     func load() async {
         state = .loading
-      //  defer { state = .idle }
         do {
-            let movies =  try await fetchMoviesUseCase.execute()
+            let movies =  try await useCase.execute()
             state = .loaded(movies)
         } catch {
             state =  .error(APIError.serverError(error))
@@ -42,7 +41,7 @@ final class MovieListViewModel {
         defer { isRefreshing = false }
         
         do {
-            let movies =  try await fetchMoviesUseCase.execute()
+            let movies =  try await useCase.execute()
             state =  .loaded(movies)
         }
         catch {
