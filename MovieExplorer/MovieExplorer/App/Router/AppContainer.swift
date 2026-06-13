@@ -6,11 +6,17 @@
 //
 
 import Foundation
+import SwiftData
 
 @MainActor
 @Observable
 final class AppContainer {
     let router = Router()
+    private let modelContext: ModelContext
+    
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
     
     func makeMovieListViewModel() -> MovieListViewModel {
         
@@ -18,20 +24,33 @@ final class AppContainer {
             decoratee: APIService()
         )
         
-        let dataSource = MovieRemoteDataSource(
+        let remoteDataSource = MovieRemoteDataSource(
             service: apiService
         )
         
         let repository = MovieListRepository(
-            dataSource: dataSource
+            remote: remoteDataSource
         )
         
         let useCase = FetchMoviesUseCase(
             repository: repository
         )
         
+        let recentlyViewedLocal = RecentlyViewedLocalDataSource(
+            context: modelContext
+        )
+        
+        let recentlyViewedRepository = RecentlyViewedRepository(
+            local: recentlyViewedLocal
+        )
+        
+        let recentlyViewedUseCase = RecentlyViewedUseCase(
+            repository: recentlyViewedRepository
+        )
+        
         return MovieListViewModel(
-            useCase: useCase
+            useCase: useCase,
+            recentlyViewedUseCase: recentlyViewedUseCase
         )
     }
     
@@ -53,9 +72,37 @@ final class AppContainer {
             repository: repository
         )
         
+        // Recently Viewed (SwiftData)
+        let recentlyViewedLocal = RecentlyViewedLocalDataSource(
+            context: modelContext
+        )
+        
+        let recentlyViewedRepository = RecentlyViewedRepository(
+            local: recentlyViewedLocal
+        )
+        
+        let recentlyViewedUseCase = RecentlyViewedUseCase(
+            repository: recentlyViewedRepository
+        )
+        
         return MovieDetailViewModel(
             movieId: movieId,
-            fetchMovieDetailUseCase: useCase
+            fetchMovieDetailUseCase: useCase, recentlyViewedUseCase: recentlyViewedUseCase
+        )
+    }
+    
+    func makeRecentlyViewedUseCase() -> RecentlyViewedUseCaseProtocol {
+        
+        let local = RecentlyViewedLocalDataSource(
+            context: modelContext
+        )
+        
+        let repository = RecentlyViewedRepository(
+            local: local
+        )
+        
+        return RecentlyViewedUseCase(
+            repository: repository
         )
     }
 }

@@ -10,13 +10,13 @@ protocol MovieListRepositoryProtocol {
 }
 
 final class MovieListRepository: MovieListRepositoryProtocol {
-    private let dataSource: MoviesListDataSourceProtocol
+    private let remote: RemoteMoviesDataSourceProtocol
     
-    init(dataSource: MoviesListDataSourceProtocol) {
-        self.dataSource = dataSource
+    init(remote: RemoteMoviesDataSourceProtocol) {
+        self.remote = remote
     }
     
     func fetchMovies() async throws -> [Movie] {
-        try await self.dataSource.fetchMovies()
+        try await self.remote.fetchMovies()
     }
 }

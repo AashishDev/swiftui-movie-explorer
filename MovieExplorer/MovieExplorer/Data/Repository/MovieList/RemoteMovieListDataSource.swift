@@ -7,11 +7,11 @@
 
 import Foundation
 
-protocol MoviesListDataSourceProtocol {
+protocol RemoteMoviesDataSourceProtocol {
     func fetchMovies() async throws -> [Movie]
 }
 
-class MovieRemoteDataSource: MoviesListDataSourceProtocol {
+class MovieRemoteDataSource: RemoteMoviesDataSourceProtocol {
     let service:APIServiceProtocol
     init(service: APIServiceProtocol) {
         self.service = service

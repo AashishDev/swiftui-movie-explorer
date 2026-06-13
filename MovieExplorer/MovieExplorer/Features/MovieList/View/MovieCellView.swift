@@ -17,9 +17,10 @@ struct MovieCellView:View {
             Text(movie.title)
                 .font(.headline)
             Text(movie.description)
-                .lineLimit(2)
+                .lineLimit(3)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
+                .multilineTextAlignment(.leading)
         }.padding(.vertical, 4)
     }
 }

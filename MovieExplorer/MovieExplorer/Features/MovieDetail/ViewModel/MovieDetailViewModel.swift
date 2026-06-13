@@ -18,26 +18,29 @@ enum MovieDetailState: Equatable {
 @MainActor
 @Observable
 final class MovieDetailViewModel {
-
     private(set) var state: MovieDetailState = .idle
 
     private let movieId: Int
     private let fetchMovieDetailUseCase: MovieDetailUseCaseProtocol
+    private let recentlyViewedUseCase: RecentlyViewedUseCaseProtocol
 
     init(
         movieId: Int,
-        fetchMovieDetailUseCase: MovieDetailUseCaseProtocol
+        fetchMovieDetailUseCase: MovieDetailUseCaseProtocol,
+        recentlyViewedUseCase: RecentlyViewedUseCaseProtocol
     ) {
         self.movieId = movieId
         self.fetchMovieDetailUseCase = fetchMovieDetailUseCase
+        self.recentlyViewedUseCase = recentlyViewedUseCase
     }
-
+    
     func load() async {
         state = .loading
-
+        
         do {
             let movie = try await fetchMovieDetailUseCase
                 .getDetail(for: movieId)
+            recentlyViewedMovie(for: movie)
             state = .loaded(movie)
 
         } catch let apiError as APIError {
@@ -46,6 +49,12 @@ final class MovieDetailViewModel {
             state = .error(
                 .serverError(error)
             )
+        }
+    }
+    
+    func recentlyViewedMovie(for movie:MovieDetail) {
+        Task {
+            try await recentlyViewedUseCase.add(movie: movie)
         }
     }
 }

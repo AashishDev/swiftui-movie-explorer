@@ -14,11 +14,7 @@ struct MovieDetailView: View {
         content
             .navigationTitle("Movie Details")
             .task {
-
-                guard viewModel.state == .idle else {
-                    return
-                }
-
+                guard viewModel.state == .idle else { return}
                 await viewModel.load()
             }
     }
@@ -30,13 +26,10 @@ struct MovieDetailView: View {
 
         case .idle,
              .loading:
-
             ProgressView()
 
         case .loaded(let movie):
-
             List {
-
                 LabeledContent(
                     "Title",
                     value: movie.title
@@ -51,7 +44,6 @@ struct MovieDetailView: View {
                 )
 
                 Section("Overview") {
-
                     Text(movie.description)
                 }
             }

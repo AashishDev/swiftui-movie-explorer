@@ -30,40 +30,116 @@ struct MovieListView: View {
         .task {
             if viewModel.state == .idle {
                 await viewModel.load()
+                await viewModel.loadRecentlyViewed()
             }
         }
     }
     
+    // MARK: - Content
     @ViewBuilder
     private var content: some View {
         
         switch viewModel.state {
-        case .idle,.loading:
+            
+        case .idle, .loading:
             ProgressView("Loading Movies...")
             
         case .loaded(let movies):
-            List(movies) { movie in
-                Button {
-                    container.router.push(.movieDetails(movie.id))
-                } label: {
-                    MovieCellView(movie: movie)
+            
+            ScrollView {
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    // Recently Viewed items [From Swift data]
+                    if !viewModel.recentlyViewed.isEmpty {
+                        recentlyViewedSection
+                        Divider()
+                    }
+                    
+                    //Movie List SECTION
+                    movieListSection(movies)
                 }
             }
             
         case .error(let error):
-            ErrorStateView(message: error.message,retryAction: {
-                Task {
-                    await viewModel.load()
+            ErrorStateView(
+                message: error.message,
+                retryAction: {
+                    Task { await viewModel.load() }
                 }
-            }
             )
         }
     }
-}
+    
+    // MARK: - Recently Viewed Section
+    
+    private var recentlyViewedSection: some View {
+        
+        VStack(alignment: .leading, spacing: 8) {
+            
+            HStack {
+                Text("Recently Viewed")
+                    .font(.headline)
+                Spacer()
+                
+                Button {
+                    Task {
+                        await viewModel.clearRecentlyViewed()
+                    }
+                } label: {
+                    Image(systemName: "trash")
+                        .foregroundColor(.red)
+                }
+            }
+            .padding(.horizontal)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                
+                HStack(spacing: 8) {
+                    ForEach(viewModel.recentlyViewed) { item in
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(item.title)
+                                .font(.headline)
+                                .lineLimit(2)
+                                .frame(width: 150, alignment: .leading)
+                            
+                            Text(item.displayDate)
+                                .font(.caption)
+                                .lineLimit(1)
+                                .frame(width: 120, alignment: .leading)
+                        }
+                        .padding(8)
+                        .background(Color(.secondarySystemBackground))
+                    }
+                }
+                .padding(.horizontal)
+            }
+        }
+    }
+    
+    // MARK: - Movie List Section
+    
+    private func movieListSection(_ movies: [Movie]) -> some View {
+        
+        VStack(alignment: .leading, spacing: 8) {
+            
+            Text("Popular Movies")
+                .font(.headline)
+                .padding(.horizontal)
+            
+            ForEach(movies) { movie in
+                Button {
+                    container.router.push(
+                        .movieDetails(id: movie.id)
+                    )
+                } label: {
+                    MovieCellView(movie: movie)
+                }
+                .padding(.horizontal)
+                Divider()
+            }
+        }
 
-
-#Preview {
-    NavigationView {
-        //MovieListView(viewModel: <#MovieListViewModel#>)
     }
 }
+
+

@@ -6,17 +6,19 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct MovieExplorerApp: App {
-    @State private var container = AppContainer()
-    
     var body: some Scene {
         WindowGroup {
-            MovieListView(
-                viewModel: container.makeMovieListViewModel()
-            )
-            .environment(container)
+            RootView()
         }
+        .modelContainer(for: [
+            RecentlyViewedEntity.self
+        ])
     }
 }
+
+
+
