@@ -24,20 +24,17 @@ final class RecentlyViewedLocalDataSource:
 
     func add(movie: MovieDetail) throws {
         
-        // Avoid duplicates → update timestamp
+        //TODO: Avoid duplicates → update timestamp
         let entity = RecentlyViewedEntity(
             id: movie.id,
             title: movie.title,
             viewedAt: Date()
         )
         context.insert(entity)
-        
         try context.save()
     }
 
     func fetch(limit: Int) throws -> [RecentlyViewedMovie] {
-        print("\n\n Fetch Recently")
-
         let descriptor = FetchDescriptor<RecentlyViewedEntity>(
             sortBy: [
                 SortDescriptor(\.viewedAt, order: .reverse)
@@ -52,8 +49,6 @@ final class RecentlyViewedLocalDataSource:
                 viewedAt: $0.viewedAt
             )
         }
-        
-        print("\n\n\n Viewed Movies \(movies.count)")
         return movies
     }
 

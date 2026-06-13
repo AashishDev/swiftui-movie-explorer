@@ -30,6 +30,10 @@ struct MovieListView: View {
         .task {
             if viewModel.state == .idle {
                 await viewModel.load()
+            }
+        }
+        .onChange(of: container.router.path) { _, _ in
+            Task {
                 await viewModel.loadRecentlyViewed()
             }
         }
@@ -99,7 +103,7 @@ struct MovieListView: View {
                         VStack(alignment: .leading, spacing: 6) {
                             Text(item.title)
                                 .font(.headline)
-                                .lineLimit(2)
+                                .lineLimit(1)
                                 .frame(width: 150, alignment: .leading)
                             
                             Text(item.displayDate)
@@ -117,7 +121,6 @@ struct MovieListView: View {
     }
     
     // MARK: - Movie List Section
-    
     private func movieListSection(_ movies: [Movie]) -> some View {
         
         VStack(alignment: .leading, spacing: 8) {
@@ -138,7 +141,7 @@ struct MovieListView: View {
                 Divider()
             }
         }
-
+        
     }
 }
 

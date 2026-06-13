@@ -24,7 +24,8 @@ final class MovieListViewModel {
     private let useCase: FetchMoviesUseCase
     private let recentlyViewedUseCase: RecentlyViewedUseCaseProtocol
     
-    init(useCase: FetchMoviesUseCase,recentlyViewedUseCase: RecentlyViewedUseCaseProtocol) {
+    init(useCase: FetchMoviesUseCase,
+         recentlyViewedUseCase: RecentlyViewedUseCaseProtocol) {
         self.useCase = useCase
         self.recentlyViewedUseCase = recentlyViewedUseCase
     }
@@ -57,12 +58,11 @@ final class MovieListViewModel {
 }
 
 extension MovieListViewModel {
-    
     func loadRecentlyViewed() async {
         do {
             recentlyViewed = try await recentlyViewedUseCase.fetch(limit: 10)
         } catch {
-            print("Failed to load recently viewed: \(error)")
+            recentlyViewed = []
         }
     }
     
@@ -70,8 +70,9 @@ extension MovieListViewModel {
         do {
             try await recentlyViewedUseCase.clearAll()
             recentlyViewed = []
-        } catch {
-            print("Failed to clear recently viewed: \(error)")
+        }
+        catch {
+            recentlyViewed = []
         }
     }
 }
