@@ -18,9 +18,8 @@ class MovieRemoteDataSource: MoviesListDataSourceProtocol {
     }
     
     func fetchMovies() async throws -> [Movie] {
-        
-        let apiURL = URL(string:"https://api.themoviedb.org/3/movie/popular?api_key=11c5d3b2a72c53e38a4b740b08d28921")!
-        let (data,_) = try await service.execute(urlRequest:URLRequest(url: apiURL))
+        let request = try MovieEndPoint.popularMovies.makeRequest()
+        let (data,_) = try await service.execute(urlRequest:request)
         
         do {
             let responseDTO = try JSONDecoder().decode(
