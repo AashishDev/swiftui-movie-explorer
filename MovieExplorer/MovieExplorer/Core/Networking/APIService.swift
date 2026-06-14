@@ -15,7 +15,7 @@ class APIService:APIServiceProtocol {
     }
     
     func execute(urlRequest: URLRequest) async throws -> (Data, HTTPURLResponse) {
-       
+        
         do {
             let (data,response) = try await session.data(for: urlRequest)
             
@@ -29,7 +29,9 @@ class APIService:APIServiceProtocol {
             
             return (data,httpResponse)
         }
-        catch {
+        catch let error as APIError {
+            throw error
+        } catch {
             throw APIError.serverError(error)
         }
     }
