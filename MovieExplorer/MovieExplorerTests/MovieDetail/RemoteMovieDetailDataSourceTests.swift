@@ -13,7 +13,7 @@ import Foundation
 struct RemoteMovieDetailDataSourceTests {
 
     @Test
-    func fetchDetail_success_decodesCorrectly() async throws {
+    func remoteMovieDetailDataSource_fetchMovieDetail_decodesCorrectly() async throws {
 
         let json = """
         {
@@ -42,7 +42,7 @@ struct RemoteMovieDetailDataSourceTests {
     }
 
     @Test
-    func fetchDetail_invalidJSON_throwsDecodingError() async {
+    func remoteMovieDetailDataSource_withInvalidAPIResponse_throwsDecodingError() async {
 
         let service = MockAPIService()
         service.result = .success((Data("bad json".utf8), HTTPURLResponse()))

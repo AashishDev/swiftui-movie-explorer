@@ -11,14 +11,14 @@ import Testing
 struct MovieDetailRepositoryTests {
 
     @Test
-    func fetchDetail_returnsMovieFromDataSource() async throws {
+    func movieDetailRepository_fetchDetail_returnsMovies() async throws {
 
         let dataSource = MockMovieDetailDataSource()
 
         let expected = MovieDetail(
             id: 10,
-            title: "Repo Movie",
-            description: "Repo Desc",
+            title: "a Movie",
+            description: "a Desc",
             rating: 9.1
         )
 
@@ -28,6 +28,6 @@ struct MovieDetailRepositoryTests {
         let result = try await repo.fetchDetail(for: 10)
 
         #expect(result.id == 10)
-        #expect(result.title == "Repo Movie")
+        #expect(result.title == "a Movie")
     }
 }

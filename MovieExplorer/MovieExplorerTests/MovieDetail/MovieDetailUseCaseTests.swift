@@ -11,14 +11,14 @@ import Testing
 struct MovieDetailUseCaseTests {
 
     @Test
-    func execute_success_returnsMovieDetail() async throws {
+    func movieDetailUseCase_OnSuccess_returnsMovieDetail() async throws {
 
         let repo = MockMovieDetailRepository()
 
         let expected = MovieDetail(
             id: 1,
-            title: "UseCase Movie",
-            description: "Desc",
+            title: "a movie",
+            description: "desc",
             rating: 8.0
         )
 
@@ -28,12 +28,12 @@ struct MovieDetailUseCaseTests {
 
         let result = try await useCase.getDetail(for: 1)
 
-        #expect(result.title == "UseCase Movie")
+        #expect(result.title == "a movie")
         #expect(result.rating == 8.0)
     }
 
     @Test
-    func execute_failure_throwsError() async {
+    func movieDetailUseCase_OnApiFailure_throwsError() async {
 
         let repo = MockMovieDetailRepository()
         repo.result = .failure(APIError.decodingError)
