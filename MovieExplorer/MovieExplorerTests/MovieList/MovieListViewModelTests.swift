@@ -7,77 +7,76 @@
 
 import Testing
 @testable import MovieExplorer
+import Foundation
 
+@MainActor
 struct MovieListViewModelTests {
-
+    
     @Test
-    func load_success_updatesStateAndRecentlyViewed() async {
-
+    func movieListViewModel_OnSuccessfulLoad_updatesStateAndRecentlyViewed() async {
+        
         let repo = MockMovieRepository()
         repo.result = .success([
-            Movie(id: 1, title: "Movie A")
+            Movie(id: 1, title: "a title", description: "a description", isFavourite: true)
         ])
-
-        let useCase = FetchMoviesUseCase(repository: repo)
-
+        
+        let useCase =  FetchMoviesUseCase(repository: repo)
         let recently = MockRecentlyViewedUseCase()
         recently.items = [
-            RecentlyViewedMovie(id: 1, title: "Old Movie")
+            RecentlyViewedMovie(id: 1, title: "Old Movie", viewedAt: Date())
         ]
-
+        
         let vm = MovieListViewModel(
             useCase: useCase,
             recentlyViewedUseCase: recently
         )
-
         await vm.load()
-
-        if case let .loaded(movies) = vm.state {
-            #expect(movies.count == 1)
-        } else {
-            #expect(false)
+        
+        guard case let .loaded(movies) = vm.state else {
+            Issue.record("Expected .loaded state but got \(vm.state)")
+            return
         }
-
+        
+        #expect(movies.count == 1)
         #expect(vm.recentlyViewed.count == 1)
     }
-
+    
     @Test
-    func load_failure_setsErrorState() async {
-
+    func movieListViewModel_OnFailure_setsErrorState() async {
+        
         let repo = MockMovieRepository()
-        repo.result = .failure(URLError(.badServerResponse))
-
+        repo.result = .failure(APIError.invalidResponse)
+        
         let useCase = FetchMoviesUseCase(repository: repo)
-
+        
         let vm = MovieListViewModel(
             useCase: useCase,
             recentlyViewedUseCase: MockRecentlyViewedUseCase()
         )
-
+        
         await vm.load()
-
+        
         if case .error = vm.state {
             #expect(true)
         } else {
-            #expect(false)
+            Issue.record("Expected error state")
         }
     }
-
+    
     @Test
-    func clearRecentlyViewed_removesItems() async {
-
+    func movieListViewModel_clearRecentlyViewed_removesItems() async {
+        
         let recently = MockRecentlyViewedUseCase()
         recently.items = [
-            RecentlyViewedMovie(id: 1, title: "A")
+            RecentlyViewedMovie(id: 1, title: "A", viewedAt: Date())
         ]
-
+        
         let vm = MovieListViewModel(
             useCase: FetchMoviesUseCase(repository: MockMovieRepository()),
             recentlyViewedUseCase: recently
         )
-
+        
         await vm.clearRecentlyViewed()
-
         #expect(vm.recentlyViewed.isEmpty)
     }
 }
