@@ -10,7 +10,7 @@ A scalable iOS app built with Swift 6, SwiftUI and clean MVVM architecture demon
 # Data Flow diagram
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/24ac2209-6c93-41fd-a1e1-59de87308473" width="200"/>
+  <img src="https://github.com/user-attachments/assets/24ac2209-6c93-41fd-a1e1-59de87308473" width="400"/>
 </p>
 ----
 
