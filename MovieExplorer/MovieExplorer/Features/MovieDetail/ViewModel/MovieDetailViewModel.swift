@@ -40,7 +40,7 @@ final class MovieDetailViewModel {
         do {
             let movie = try await fetchMovieDetailUseCase
                 .getDetail(for: movieId)
-            recentlyViewedMovie(for: movie)
+            await recentlyViewedMovie(for: movie)
             state = .loaded(movie)
 
         } catch let apiError as APIError {
@@ -52,9 +52,11 @@ final class MovieDetailViewModel {
         }
     }
     
-    func recentlyViewedMovie(for movie:MovieDetail) {
-        Task {
+    func recentlyViewedMovie(for movie:MovieDetail) async {
+        do {
             try await recentlyViewedUseCase.add(movie: movie)
+        } catch {
+            print("Failed to save recently viewed movie: \(error)")
         }
     }
 }
