@@ -10,7 +10,7 @@ import Testing
 final class MockMovieDetailRepository: MovieDetailRepositoryProtocol {
     var result: Result<MovieDetail, Error>!
 
-    func fetchDetail(for id: Int) async throws -> MovieDetail {
+    func fetchDetail(for id: String) async throws -> MovieDetail {
         try result.get()
     }
 }

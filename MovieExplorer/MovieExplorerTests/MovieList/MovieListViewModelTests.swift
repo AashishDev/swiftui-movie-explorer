@@ -17,13 +17,13 @@ struct MovieListViewModelTests {
         
         let repo = MockMovieRepository()
         repo.result = .success([
-            Movie(id: 1, title: "a title", description: "a description", isFavourite: true)
+            Movie(id: "101", title: "a title", description: "a description", imageURL: "")
         ])
         
         let useCase =  FetchMoviesUseCase(repository: repo)
         let recently = MockRecentlyViewedUseCase()
         recently.items = [
-            RecentlyViewedMovie(id: 1, title: "Old Movie", viewedAt: Date())
+            RecentlyViewedMovie(id: "101", title: "Old Movie", viewedAt: Date())
         ]
         
         let vm = MovieListViewModel(
@@ -68,7 +68,7 @@ struct MovieListViewModelTests {
         
         let recently = MockRecentlyViewedUseCase()
         recently.items = [
-            RecentlyViewedMovie(id: 1, title: "A", viewedAt: Date())
+            RecentlyViewedMovie(id: "101", title: "A", viewedAt: Date())
         ]
         
         let vm = MovieListViewModel(

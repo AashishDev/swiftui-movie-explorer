@@ -16,20 +16,20 @@ struct MovieDetailUseCaseTests {
         let repo = MockMovieDetailRepository()
 
         let expected = MovieDetail(
-            id: 1,
+            id: "101",
             title: "a movie",
             description: "desc",
-            rating: 8.0
+            rating: "8"
         )
 
         repo.result = .success(expected)
 
         let useCase = MovieDetailUseCase(repository: repo)
 
-        let result = try await useCase.getDetail(for: 1)
+        let result = try await useCase.getDetail(for: "101")
 
         #expect(result.title == "a movie")
-        #expect(result.rating == 8.0)
+        #expect(result.rating == "8")
     }
 
     @Test
@@ -41,7 +41,7 @@ struct MovieDetailUseCaseTests {
         let useCase = MovieDetailUseCase(repository: repo)
 
         await #expect(throws: APIError.self) {
-            _ = try await useCase.getDetail(for: 1)
+            _ = try await useCase.getDetail(for: "101")
         }
     }
 }

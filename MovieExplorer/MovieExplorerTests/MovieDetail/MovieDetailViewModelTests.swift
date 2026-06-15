@@ -15,10 +15,10 @@ struct MovieDetailViewModelTests {
     func movieDetailViewModel_OnSuccess_andMovieInRecentlyViewed() async {
 
         let movie = MovieDetail(
-            id: 1,
+            id: "102",
             title: "a title",
-            description: "a description"
-            rating: 9.5
+            description: "a description",
+            rating: "9"
         )
 
         let useCase = MockMovieDetailUseCase()
@@ -27,7 +27,7 @@ struct MovieDetailViewModelTests {
         let recently = MockDetailRecentlyViewedUseCase()
 
         let vm = MovieDetailViewModel(
-            movieId: 1,
+            movieId: "102",
             fetchMovieDetailUseCase: useCase,
             recentlyViewedUseCase: recently
         )
@@ -39,9 +39,9 @@ struct MovieDetailViewModelTests {
             return
         }
 
-        #expect(result.id == 1)
+        #expect(result.id == "102")
         #expect(result.title == "a title")
-        #expect(recently.addedMovie?.id == 1)
+        #expect(recently.addedMovie?.id == "102")
     }
 
     @Test
@@ -51,7 +51,7 @@ struct MovieDetailViewModelTests {
         useCase.result = .failure(APIError.decodingError)
 
         let vm = MovieDetailViewModel(
-            movieId: 1,
+            movieId: "101",
             fetchMovieDetailUseCase: useCase,
             recentlyViewedUseCase: MockRecentlyViewedUseCase()
         )

@@ -15,10 +15,10 @@ struct MovieListRepositoryTests {
 
         let remote = MockRemoteDataSource()
         remote.result = .success([
-            Movie(id: 1, title: "a movie",description: "a description",isFavourite: false)
+            Movie(id: "101", title: "a movie",description: "a description",imageURL: "")
         ])
 
-        let repository = MovieListRepository(remote: remote)
+        let repository = MovieListRepository(remote: remote, local: MockLocalMoviesDataSource())
         let result = try await repository.fetchMovies()
 
         #expect(result.count == 1)

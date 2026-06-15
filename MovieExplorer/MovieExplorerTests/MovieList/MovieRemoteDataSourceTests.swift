@@ -15,15 +15,14 @@ struct MovieRemoteDataSourceTests {
     @Test
     func movieRemoteDataSource_fetchMovies_successfulDecoding() async throws {
         let json = """
-        {
-            "results": [
+        [
                 {
-                    "id": 1,
+                    "id": "101",
                     "title": "a title",
-                    "overview": "This is a great movie description."
+                    "description": "This is a great movie description.",
+                    "image": "https://test.com/movie.jpg"
                 }
             ]
-        }
         """.data(using: .utf8)!
         
         
@@ -37,7 +36,7 @@ struct MovieRemoteDataSourceTests {
         
         //Verify the properties
         #expect(movies.count == 1)
-        #expect(movies.first?.id == 1)
+        #expect(movies.first?.id == "101")
         #expect(movies.first?.title == "a title")
         #expect(movies.first?.description == "This is a great movie description.")
     }

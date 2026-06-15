@@ -15,3 +15,13 @@ final class MockRemoteDataSource: RemoteMoviesDataSourceProtocol {
         try result.get()
     }
 }
+
+
+final class MockLocalMoviesDataSource: LocalMoviesDataSourceProtocol {
+    func fetchMovies() async throws -> [MovieExplorer.Movie] {
+        return []
+    }
+    
+    func saveMovies(_ movies: [MovieExplorer.Movie]) async throws {
+    }
+}

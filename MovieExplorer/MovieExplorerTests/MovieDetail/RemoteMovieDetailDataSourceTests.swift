@@ -17,10 +17,10 @@ struct RemoteMovieDetailDataSourceTests {
 
         let json = """
         {
-            "id": 1,
+            "id": "101",
             "title": "Decoded Movie",
             "description": "Some desc",
-            "rating": 8.7
+            "rating": "8.7"
         }
         """.data(using: .utf8)!
 
@@ -30,11 +30,11 @@ struct RemoteMovieDetailDataSourceTests {
         let dataSource = RemoteMovieDetailDataSource(service: service)
 
         do {
-            let result = try await dataSource.fetchDetail(for: 1)
+            let result = try await dataSource.fetchDetail(for: "101")
             
-            #expect(result.id == 1)
+            #expect(result.id == "101")
             #expect(result.title == "Decoded Movie")
-            #expect(result.rating == 8.7)
+            #expect(result.rating == "8")
         }
         catch {
             print(error)
@@ -50,7 +50,7 @@ struct RemoteMovieDetailDataSourceTests {
         let dataSource = RemoteMovieDetailDataSource(service: service)
 
         await #expect(throws: APIError.self) {
-            _ = try await dataSource.fetchDetail(for: 1)
+            _ = try await dataSource.fetchDetail(for: "101")
         }
     }
 }

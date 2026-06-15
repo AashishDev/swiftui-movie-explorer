@@ -9,10 +9,10 @@ import Testing
 @testable import MovieExplorer
 
 final class MockMovieDetailDataSource: RemoteMovieDetailDataSourceProtocol {
-
+    
     var result: Result<MovieDetail, Error>!
 
-    func fetchDetail(for movieId: Int) async throws -> MovieDetail {
+    func fetchDetail(for movieId: String) async throws -> MovieDetail {
         try result.get()
     }
 }

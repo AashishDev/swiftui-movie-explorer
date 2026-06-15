@@ -16,7 +16,7 @@ struct FetchMoviesUseCaseTests {
     func fetchMoviesUseCase_returnsMovies_successfully() async throws {
         let repo = MockMovieRepository()
         repo.result = .success([
-            Movie(id: 1, title: "Test", description: " a description",isFavourite:false)
+            Movie(id: "101", title: "Test", description: " a description",imageURL:"")
         ])
 
         let useCase = FetchMoviesUseCase(repository: repo)
