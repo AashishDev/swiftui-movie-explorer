@@ -7,13 +7,15 @@
 import Foundation
 
 struct RecentlyViewedMovie: Identifiable, Equatable {
-    let id: Int
+
+    let id: String
     let title: String
     let viewedAt: Date
-    
-    var displayDate:String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter.string(from: viewedAt)
+
+    var displayDate: String {
+        viewedAt.formatted(
+            date: .abbreviated,
+            time: .omitted
+        )
     }
 }

@@ -11,15 +11,15 @@ import Foundation
 final class RecentlyViewedEntity {
 
     @Attribute(.unique)
-    var id: Int
+    var id: String
 
     var title: String
     var viewedAt: Date
 
     init(
-        id: Int,
+        id: String,
         title: String,
-        viewedAt: Date = Date()
+        viewedAt: Date = .now
     ) {
         self.id = id
         self.title = title

@@ -23,44 +23,47 @@ final class RecentlyViewedLocalDataSource:
     }
 
     func add(movie: MovieDetail) throws {
-        let id = movie.id
-        
-//        let descriptor = FetchDescriptor<RecentlyViewedEntity>(
-//            predicate: #Predicate { $0.id == id }
-//        )
-//        
-//        if let existing = try context.fetch(descriptor).first {
-//            // Update timestamp instead insert duplicate
-//            existing.viewedAt = Date()
-//        } else {
-//            let entity = RecentlyViewedEntity(
-//                id: movie.id,
-//                title: movie.title,
-//                viewedAt: Date()
-//            )
-//            context.insert(entity)
-//        }
-//        
-//        try context.save()
+
+        let movieID = movie.id
+
+        let descriptor = FetchDescriptor<RecentlyViewedEntity>(
+            predicate: #Predicate {
+                $0.id == movieID
+            }
+        )
+
+        if let existing = try context.fetch(descriptor).first {
+            existing.viewedAt = .now
+        } else {
+            context.insert(
+                RecentlyViewedEntity(
+                    id: movie.id,
+                    title: movie.title
+                )
+            )
+        }
+
+        try context.save()
     }
 
     func fetch(limit: Int) throws -> [RecentlyViewedMovie] {
-        let descriptor = FetchDescriptor<RecentlyViewedEntity>(
-            sortBy: [
-                SortDescriptor(\.viewedAt, order: .reverse)
-            ]
-        )
 
-        let entities = try context.fetch(descriptor)
-        let movies =  entities.prefix(limit).map {
-            RecentlyViewedMovie(
-                id: $0.id,
-                title: $0.title,
-                viewedAt: $0.viewedAt
-            )
-        }
-        return movies
-    }
+           var descriptor = FetchDescriptor<RecentlyViewedEntity>(
+               sortBy: [
+                   SortDescriptor(\.viewedAt, order: .reverse)
+               ]
+           )
+
+           descriptor.fetchLimit = limit
+
+           return try context.fetch(descriptor).map {
+               RecentlyViewedMovie(
+                   id: $0.id,
+                   title: $0.title,
+                   viewedAt: $0.viewedAt
+               )
+           }
+       }
 
     func clearAll() throws {
 

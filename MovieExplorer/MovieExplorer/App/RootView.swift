@@ -9,14 +9,32 @@ import SwiftUI
 import SwiftData
 
 struct RootView: View {
+
     @Environment(\.modelContext) private var modelContext
+    @State private var container: AppContainer?
 
+    init() {
+          print("✅ RootView init")
+      }
+    
     var body: some View {
-        let container = AppContainer(modelContext: modelContext)
 
-        MovieListView(
-            viewModel: container.makeMovieListViewModel()
-        )
-        .environment(container)
+        Group {
+            if let container {
+                MovieListView(
+                    viewModel: container.makeMovieListViewModel()
+                )
+                .environment(container)
+            } else {
+                LaunchView()
+            }
+        }
+        .task {
+            if container == nil {
+                container = AppContainer(
+                    modelContext: modelContext
+                )
+            }
+        }
     }
 }
