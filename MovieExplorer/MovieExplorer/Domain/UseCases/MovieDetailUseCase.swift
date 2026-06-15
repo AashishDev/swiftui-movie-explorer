@@ -6,7 +6,7 @@
 //
 
 protocol MovieDetailUseCaseProtocol {
-    func getDetail(for id:Int) async throws -> MovieDetail
+    func getDetail(for id:String) async throws -> MovieDetail
 }
 
 final class MovieDetailUseCase: MovieDetailUseCaseProtocol {
@@ -16,7 +16,7 @@ final class MovieDetailUseCase: MovieDetailUseCaseProtocol {
         self.repository = repository
     }
     
-    func getDetail(for id: Int)  async throws -> MovieDetail {
+    func getDetail(for id: String)  async throws -> MovieDetail {
         try Task.checkCancellation()
         
         return try await repository.fetchDetail(

@@ -6,8 +6,8 @@
 //
 
 struct MovieDetail:Identifiable,Equatable,Sendable {
-    var id: Int
+    var id: String
     var title: String
     var description: String
-    var rating: Double
+    var rating: String
 }

@@ -18,6 +18,9 @@ class APIService:APIServiceProtocol {
         
         do {
             let (data,response) = try await session.data(for: urlRequest)
+            if let body = String(data: data, encoding: .utf8) {
+                print("Response Body:", body)
+            }
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw APIError.invalidResponse

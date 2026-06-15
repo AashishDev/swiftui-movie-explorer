@@ -23,10 +23,10 @@ class MovieRemoteDataSource: RemoteMoviesDataSourceProtocol {
         
         do {
             let responseDTO = try JSONDecoder().decode(
-                MoviesResponseDTO.self,
+                [MovieDTO].self,
                 from: data
             )
-            return responseDTO.results.map { $0.toDomain()}
+            return responseDTO.map { $0.toDomain()}
         }
         catch {
             throw APIError.decodingError
@@ -34,3 +34,4 @@ class MovieRemoteDataSource: RemoteMoviesDataSourceProtocol {
         
     }
 }
+

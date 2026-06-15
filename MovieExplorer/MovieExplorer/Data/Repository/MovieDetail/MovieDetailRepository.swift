@@ -7,7 +7,7 @@
 import Foundation
 
 protocol MovieDetailRepositoryProtocol {
-    func fetchDetail(for id: Int) async throws -> MovieDetail
+    func fetchDetail(for id: String) async throws -> MovieDetail
 }
 
 final class MovieDetailRepository: MovieDetailRepositoryProtocol {
@@ -17,7 +17,7 @@ final class MovieDetailRepository: MovieDetailRepositoryProtocol {
         self.dataSource = dataSource
     }
     
-    func fetchDetail(for id: Int) async throws -> MovieDetail {
+    func fetchDetail(for id: String) async throws -> MovieDetail {
         try await self.dataSource.fetchDetail(for: id)
     }
 }

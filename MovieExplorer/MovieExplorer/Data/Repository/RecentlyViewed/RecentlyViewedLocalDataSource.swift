@@ -25,23 +25,23 @@ final class RecentlyViewedLocalDataSource:
     func add(movie: MovieDetail) throws {
         let id = movie.id
         
-        let descriptor = FetchDescriptor<RecentlyViewedEntity>(
-            predicate: #Predicate { $0.id == id }
-        )
-        
-        if let existing = try context.fetch(descriptor).first {
-            // Update timestamp instead insert duplicate
-            existing.viewedAt = Date()
-        } else {
-            let entity = RecentlyViewedEntity(
-                id: movie.id,
-                title: movie.title,
-                viewedAt: Date()
-            )
-            context.insert(entity)
-        }
-        
-        try context.save()
+//        let descriptor = FetchDescriptor<RecentlyViewedEntity>(
+//            predicate: #Predicate { $0.id == id }
+//        )
+//        
+//        if let existing = try context.fetch(descriptor).first {
+//            // Update timestamp instead insert duplicate
+//            existing.viewedAt = Date()
+//        } else {
+//            let entity = RecentlyViewedEntity(
+//                id: movie.id,
+//                title: movie.title,
+//                viewedAt: Date()
+//            )
+//            context.insert(entity)
+//        }
+//        
+//        try context.save()
     }
 
     func fetch(limit: Int) throws -> [RecentlyViewedMovie] {

@@ -37,10 +37,8 @@ struct MovieDetailView: View {
 
                 LabeledContent(
                     "Rating",
-                    value: String(
-                        format: "%.1f",
+                    value:
                         movie.rating
-                    )
                 )
 
                 Section("Description") {

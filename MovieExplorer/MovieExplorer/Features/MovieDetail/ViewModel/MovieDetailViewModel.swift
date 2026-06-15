@@ -20,12 +20,12 @@ enum MovieDetailState: Equatable {
 final class MovieDetailViewModel {
     private(set) var state: MovieDetailState = .idle
 
-    private let movieId: Int
+    private let movieId: String
     private let fetchMovieDetailUseCase: MovieDetailUseCaseProtocol
     private let recentlyViewedUseCase: RecentlyViewedUseCaseProtocol
 
     init(
-        movieId: Int,
+        movieId: String,
         fetchMovieDetailUseCase: MovieDetailUseCaseProtocol,
         recentlyViewedUseCase: RecentlyViewedUseCaseProtocol
     ) {

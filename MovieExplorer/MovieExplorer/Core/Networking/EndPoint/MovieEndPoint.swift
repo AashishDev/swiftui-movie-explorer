@@ -9,8 +9,7 @@ import Foundation
 
 enum MovieEndPoint {
     case popularMovies
-    case details(id: Int)
-    case markFavorite(id: Int)
+    case details(id: String)
     
     private var method:HTTPMethod {
         switch self {
@@ -18,18 +17,7 @@ enum MovieEndPoint {
             return .get
         case .details:
             return .get
-        case .markFavorite:
-            return .post
         }
-    }
-    
-    private var queryItems: [URLQueryItem] {
-        return [
-            URLQueryItem(
-                name: "api_key",
-                value: AppEnvironment.apiKey
-            )
-        ]
     }
     
     func makeRequest() throws -> URLRequest {
@@ -38,23 +26,22 @@ enum MovieEndPoint {
                                         resolvingAgainstBaseURL:false)
         switch self {
         case .popularMovies:
-            components?.path = "/3/movie/popular"
-            components?.queryItems = queryItems
+            components?.path = "/films"
         case .details(id: let id):
-            components?.path = "/3/movie/\(id)"
-            components?.queryItems = queryItems
-            
-        case .markFavorite(id: let id):
-            components?.path = "/3/movie/\(id)/watchlist"
-            components?.queryItems = queryItems
+            components?.path = "/films/\(id)"
         }
         
         guard let url =  components?.url else {
             throw APIError.invalidResponse
         }
         
-        var request = URLRequest(url: url)
+        var request = URLRequest(url:url)
         request.httpMethod = method.rawValue
+        request.setValue(
+            "application/json",
+            forHTTPHeaderField: "Accept"
+        )
+        
         return request
     }
     

@@ -6,15 +6,10 @@
 //
 
 struct MovieDTO:Decodable,Sendable {
-    let id:Int
+    let id:String
     let title:String
     let description:String
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case title
-        case description = "overview"
-    }
+    let image: String
 }
 
 extension MovieDTO {

@@ -7,7 +7,7 @@
 import Foundation
 
 protocol RemoteMovieDetailDataSourceProtocol {
-    func fetchDetail(for movieId:Int) async throws -> MovieDetail
+    func fetchDetail(for movieId:String) async throws -> MovieDetail
 }
 
 class RemoteMovieDetailDataSource: RemoteMovieDetailDataSourceProtocol {
@@ -16,7 +16,7 @@ class RemoteMovieDetailDataSource: RemoteMovieDetailDataSourceProtocol {
         self.service = service
     }
     
-    func fetchDetail(for movieId:Int) async throws -> MovieDetail {
+    func fetchDetail(for movieId:String) async throws -> MovieDetail {
         let request = try MovieEndPoint.details(id: movieId).makeRequest()
         let (data,_) = try await service.execute(urlRequest:request)
         

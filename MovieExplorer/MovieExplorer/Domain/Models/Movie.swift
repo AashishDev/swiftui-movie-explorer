@@ -6,7 +6,7 @@
 //
 
 struct Movie: Identifiable, Hashable,Equatable {
-    let id: Int
+    let id: String
     let title: String
     let description: String
     var isFavourite: Bool

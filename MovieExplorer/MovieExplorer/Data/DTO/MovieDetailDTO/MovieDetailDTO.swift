@@ -7,16 +7,16 @@
 
 struct MovieDetailDTO: Decodable, Sendable {
 
-    let id: Int
+    let id: String
     let title: String
     let description: String
-    let voteAverage: Double
+    let rating: String
 
     enum CodingKeys: String, CodingKey {
         case id
         case title
-        case description = "overview"
-        case voteAverage = "vote_average"
+        case description 
+        case rating = "rt_score"
     }
 }
 
@@ -27,7 +27,7 @@ extension MovieDetailDTO {
             id: id,
             title: title,
             description: description,
-            rating: voteAverage
+            rating: rating
         )
     }
 }

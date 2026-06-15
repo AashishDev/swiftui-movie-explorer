@@ -35,7 +35,7 @@ final class AppContainer {
     }
 
     // MARK: - Movie Detail
-    func makeMovieDetailViewModel(for movieId: Int) -> MovieDetailViewModel {
+    func makeMovieDetailViewModel(for movieId: String) -> MovieDetailViewModel {
 
         let useCase = makeMovieDetailUseCase()
         let recentlyViewedUseCase = makeRecentlyViewedUseCase()
