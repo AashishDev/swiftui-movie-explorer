@@ -32,8 +32,13 @@ class APIService:APIServiceProtocol {
             
             return (data,httpResponse)
         }
-        catch let error as APIError {
-            throw error
+        catch let error as URLError {
+            if error.code == .notConnectedToInternet {
+                throw APIError.networkUnavailable
+            }
+            else {
+                throw APIError.serverError(error)
+            }
         } catch {
             throw APIError.serverError(error)
         }

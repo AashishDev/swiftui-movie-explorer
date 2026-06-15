@@ -19,7 +19,7 @@ enum UIConstants {
         static let msg = "Loading Movies..."
     }
     enum ErrorState {
-        static let noMovies =  "Unable to Load Movies"
+        static let noMovies =  "Unable to Load data"
     }
     
     enum Button {

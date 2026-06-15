@@ -13,7 +13,7 @@ struct MovieCellView: View {
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
 
-            AsyncImage(url: URL(string: movie.image)) { phase in
+            AsyncImage(url: URL(string: movie.imageURL)) { phase in
                 switch phase {
                 case .empty:
                     ProgressView()

@@ -15,7 +15,8 @@ struct MovieExplorerApp: App {
             RootView()
         }
         .modelContainer(for: [
-            RecentlyViewedEntity.self
+            RecentlyViewedEntity.self,
+            MovieEntity.self
         ])
     }
 }

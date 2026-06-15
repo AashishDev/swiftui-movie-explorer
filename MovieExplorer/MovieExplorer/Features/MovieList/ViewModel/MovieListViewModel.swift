@@ -36,8 +36,11 @@ final class MovieListViewModel {
             let movies =  try await useCase.execute()
             state = .loaded(movies)
             await loadRecentlyViewed()
-            
-        } catch {
+        }
+        catch let apiError as APIError {
+            state =  .error(apiError)
+        }
+        catch {
             state =  .error(APIError.serverError(error))
         }
     }
@@ -50,6 +53,9 @@ final class MovieListViewModel {
             let movies =  try await useCase.execute()
             state =  .loaded(movies)
             await loadRecentlyViewed()
+        }
+        catch let apiError as APIError {
+            state =  .error(apiError)
         }
         catch {
             state =  .error(APIError.serverError(error))

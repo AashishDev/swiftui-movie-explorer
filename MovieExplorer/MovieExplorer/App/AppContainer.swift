@@ -51,8 +51,11 @@ final class AppContainer {
     private func makeFetchMoviesUseCase() -> FetchMoviesUseCase {
 
         let remote = MovieRemoteDataSource(service: apiService)
-        let repo = MovieListRepository(remote: remote)
+        let local = LocalMoviesDataSource(context:modelContext)
 
+        let repo = MovieListRepository(remote: remote,
+                                       local: local)
+        
         return FetchMoviesUseCase(repository: repo)
     }
 

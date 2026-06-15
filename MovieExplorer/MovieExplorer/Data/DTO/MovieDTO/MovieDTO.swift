@@ -18,7 +18,9 @@ extension MovieDTO {
             id: id,
             title: title,
             description: description,
-            image: image
+            imageURL: image
         )
     }
 }
+
+
