@@ -25,8 +25,6 @@ struct RootView: View {
                     viewModel: container.makeMovieListViewModel()
                 )
                 .environment(container)
-            } else {
-                LaunchView()
             }
         }
         .task {
