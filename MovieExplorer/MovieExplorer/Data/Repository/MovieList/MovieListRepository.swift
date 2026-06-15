@@ -25,19 +25,16 @@ final class MovieListRepository: MovieListRepositoryProtocol {
         //Load data from local db firstly
         let localMovies = try await local.fetchMovies()
         
-        //Fetch API in Background
-        Task {
-            do {
-                let remoteMovies = try await remote.fetchMovies()
-                try await local.saveMovies(remoteMovies)
-            }
-            catch {
-                print("Remote fetch failed  \(error.localizedDescription)")
-            }
-        }
-        
-        //load local data from db
         if !localMovies.isEmpty {
+
+            Task {
+                do {
+                    let remoteMovies = try await remote.fetchMovies()
+                    try await local.saveMovies(remoteMovies)
+                } catch {
+                    print("Background refresh failed: \(error)")
+                }
+            }
             return localMovies
         }
         
