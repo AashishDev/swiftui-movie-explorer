@@ -7,20 +7,51 @@
 
 import SwiftUI
 
-
-struct MovieCellView:View {
+struct MovieCellView: View {
     let movie: Movie
-    
+
     var body: some View {
-        
-        VStack(alignment: .leading, spacing: 8) {
-            Text(movie.title)
-                .font(.headline)
-            Text(movie.description)
-                .lineLimit(3)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.leading)
-        }.padding(.vertical, 4)
+        HStack(alignment: .top, spacing: 12) {
+
+            AsyncImage(url: URL(string: movie.image)) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFill()
+
+                case .failure:
+                    Image(systemName: "photo")
+                        .resizable()
+                        .scaledToFit()
+                        .padding(20)
+
+                @unknown default:
+                    EmptyView()
+                }
+            }
+            .frame(width: 120, height: 120)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+
+            VStack(alignment: .leading, spacing: 8) {
+
+                Text(movie.title)
+                    .font(.headline)
+                    .multilineTextAlignment(.leading)
+                    .foregroundStyle(.primary)
+
+                Text(movie.description)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(4)
+                    .multilineTextAlignment(.leading)
+            }
+
+            Spacer()
+        }
+        .padding(.vertical, 8)
     }
 }

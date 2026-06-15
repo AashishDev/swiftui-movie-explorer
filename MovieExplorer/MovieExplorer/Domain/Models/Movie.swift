@@ -9,6 +9,6 @@ struct Movie: Identifiable, Hashable,Equatable {
     let id: String
     let title: String
     let description: String
-    var isFavourite: Bool
+    var image: String
 }
 

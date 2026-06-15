@@ -133,6 +133,7 @@ struct MovieListView: View {
                 } label: {
                     MovieCellView(movie: movie)
                 }
+                .buttonStyle(.plain)
                 .padding(.horizontal)
                 Divider()
             }
