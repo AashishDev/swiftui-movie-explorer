@@ -15,11 +15,10 @@ A scalable iOS app built with Swift 6, SwiftUI and clean MVVM architecture demon
 ----
 
 # App Screenshots
-
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/e555c643-d010-4f20-83a2-db6b31af880a" width="320"/>
-  <img src="https://github.com/user-attachments/assets/f8912c7b-6ac1-4400-8c39-67ff58c0e858" width="320"/>
-  <img src="https://github.com/user-attachments/assets/a4f5a9b8-eb69-4361-9bca-a38af331302e" width="320"/>
+  <img src="https://github.com/user-attachments/assets/64e9b3c0-5385-4328-a9f4-39245d31de77" width="320"/>
+  <img src="https://github.com/user-attachments/assets/d6c83da1-e1e9-4c57-b8f9-3f91ae723b07" width="320"/>
+  <img src="https://github.com/user-attachments/assets/422dd380-d708-49de-bfd6-7f36333ad62f" width="320"/>
 </p>
 
 ---
