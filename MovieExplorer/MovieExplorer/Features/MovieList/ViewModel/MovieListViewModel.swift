@@ -17,6 +17,7 @@ enum MovieListState:Equatable {
 @Observable
 final class MovieListViewModel {
     
+    private let network = NetworkMonitor.shared
     private(set) var state: MovieListState = .idle
     var isRefreshing = false
     private(set) var recentlyViewed: [RecentlyViewedMovie] = []
@@ -32,11 +33,6 @@ final class MovieListViewModel {
     }
     
     func load() async {
-        guard NetworkMonitor.shared.isConnected else {
-            state = .error(APIError.networkUnavailable)
-            return
-        }
-        
         state = .loading
         do {
             let movies =  try await useCase.execute(forceRefresh:false)
@@ -54,19 +50,18 @@ final class MovieListViewModel {
     func refresh() async {
         isRefreshing = true
         defer { isRefreshing = false }
-        guard NetworkMonitor.shared.isConnected else {
-            refreshErrorMessage = "No internet connection"
+        guard NetworkMonitor.shared.isConnected  else {
+            refreshErrorMessage = APIError.networkUnavailable.message
             Task {
                 try? await Task.sleep(nanoseconds: 2_000_000_000)
                 await MainActor.run {
                     self.refreshErrorMessage = nil
                 }
             }
-            return
+           return
         }
         do {
             try? await Task.sleep(nanoseconds: 800_000_000)
-            
             let movies =  try await useCase.execute(forceRefresh:true)
             state =  .loaded(movies)
             await loadRecentlyViewed()
