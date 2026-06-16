@@ -20,6 +20,7 @@ final class MovieListViewModel {
     private(set) var state: MovieListState = .idle
     var isRefreshing = false
     private(set) var recentlyViewed: [RecentlyViewedMovie] = []
+    var refreshErrorMessage: String?
     
     private let useCase: FetchMoviesUseCase
     private let recentlyViewedUseCase: RecentlyViewedUseCaseProtocol
@@ -31,9 +32,14 @@ final class MovieListViewModel {
     }
     
     func load() async {
+        guard NetworkMonitor.shared.isConnected else {
+            state = .error(APIError.networkUnavailable)
+            return
+        }
+        
         state = .loading
         do {
-            let movies =  try await useCase.execute()
+            let movies =  try await useCase.execute(forceRefresh:false)
             state = .loaded(movies)
             await loadRecentlyViewed()
         }
@@ -48,9 +54,20 @@ final class MovieListViewModel {
     func refresh() async {
         isRefreshing = true
         defer { isRefreshing = false }
-        
+        guard NetworkMonitor.shared.isConnected else {
+            refreshErrorMessage = "No internet connection"
+            Task {
+                try? await Task.sleep(nanoseconds: 2_000_000_000)
+                await MainActor.run {
+                    self.refreshErrorMessage = nil
+                }
+            }
+            return
+        }
         do {
-            let movies =  try await useCase.execute()
+            try? await Task.sleep(nanoseconds: 800_000_000)
+            
+            let movies =  try await useCase.execute(forceRefresh:true)
             state =  .loaded(movies)
             await loadRecentlyViewed()
         }

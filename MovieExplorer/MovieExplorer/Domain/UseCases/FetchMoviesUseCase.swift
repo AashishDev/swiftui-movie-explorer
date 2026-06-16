@@ -6,7 +6,7 @@
 //
 
 protocol FetchMoviesUseCaseProtocol {
-    func execute() async throws -> [Movie]
+    func execute(forceRefresh:Bool) async throws -> [Movie]
 }
 
 class FetchMoviesUseCase: FetchMoviesUseCaseProtocol {
@@ -16,8 +16,8 @@ class FetchMoviesUseCase: FetchMoviesUseCaseProtocol {
         self.repository = repository
     }
     
-    func execute() async throws -> [Movie] {
+    func execute(forceRefresh:Bool) async throws -> [Movie] {
         try Task.checkCancellation()
-        return try await repository.fetchMovies()
+        return try await repository.fetchMovies(forceRefresh:forceRefresh)
     }
 }

@@ -51,6 +51,19 @@ struct MovieListView: View {
         case .loaded(let movies):
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
+                    
+                    if let msg = viewModel.refreshErrorMessage {
+                        Text(msg)
+                            .font(.caption)
+                            .foregroundStyle(.white)
+                            .padding(8)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.red.opacity(0.8))
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .padding(.horizontal)
+                    }
+                    
+                    
                     // Recently Viewed items [From Swift data]
                     if !viewModel.recentlyViewed.isEmpty {
                         recentlyViewedSection

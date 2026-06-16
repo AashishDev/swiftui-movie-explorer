@@ -7,7 +7,7 @@
 
 import Foundation
 protocol MovieListRepositoryProtocol {
-    func fetchMovies() async throws -> [Movie]
+    func fetchMovies(forceRefresh:Bool) async throws -> [Movie]
 }
 
 final class MovieListRepository: MovieListRepositoryProtocol {
@@ -20,22 +20,14 @@ final class MovieListRepository: MovieListRepositoryProtocol {
         self.local = local
     }
     
-    func fetchMovies() async throws -> [Movie] {
+    func fetchMovies(forceRefresh:Bool) async throws -> [Movie] {
        
         //Load data from local db firstly
-        let localMovies = try await local.fetchMovies()
-        
-        if !localMovies.isEmpty {
-
-            Task {
-                do {
-                    let remoteMovies = try await remote.fetchMovies()
-                    try await local.saveMovies(remoteMovies)
-                } catch {
-                    print("Background refresh failed: \(error)")
-                }
+        if !forceRefresh {
+            let local = try await self.local.fetchMovies()
+            if !local.isEmpty {
+                return local
             }
-            return localMovies
         }
         
         //If no Local data available then fetch from remote services
