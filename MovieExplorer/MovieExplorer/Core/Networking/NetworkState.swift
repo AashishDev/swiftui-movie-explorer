@@ -9,11 +9,11 @@ import Observation
 @Observable
 @MainActor
 final class NetworkState {
-    let monitor: NetworkMonitor
+    let monitor: NetworkMonitoring
     private var task: Task<Void, Never>?
     private(set) var isConnected: Bool = false
 
-    init(monitor: NetworkMonitor) {
+    init(monitor: NetworkMonitoring) {
         self.monitor = monitor
         
         task = Task { [weak self] in

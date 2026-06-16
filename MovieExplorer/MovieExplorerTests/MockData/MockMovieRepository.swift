@@ -11,7 +11,22 @@ import Testing
 final class MockMovieRepository: MovieListRepositoryProtocol {
     var result: Result<[Movie], Error> = .success([])
 
-    func fetchMovies() async throws -> [Movie] {
+    func fetchMovies(forceRefresh: Bool) async throws -> [Movie] {
         try result.get()
+    }
+}
+
+actor MockNetworkMonitor: NetworkMonitoring {
+    private var connected: Bool = true
+    func start() async {
+    }
+    func stop() async {
+    }
+    func isConnected() async -> Bool {
+        connected
+    }
+
+    func setConnected(_ value: Bool) {
+        connected = value
     }
 }

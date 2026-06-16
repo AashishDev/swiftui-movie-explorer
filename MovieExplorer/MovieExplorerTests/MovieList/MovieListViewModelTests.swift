@@ -26,9 +26,15 @@ struct MovieListViewModelTests {
             RecentlyViewedMovie(id: "101", title: "Old Movie", viewedAt: Date())
         ]
         
+        let networkMonitor = MockNetworkMonitor()
+        let networkState = await MainActor.run {
+            NetworkState(monitor: networkMonitor)
+        }
+        
         let vm = MovieListViewModel(
             useCase: useCase,
-            recentlyViewedUseCase: recently
+            recentlyViewedUseCase: recently,
+            networkState: networkState
         )
         await vm.load()
         
@@ -48,10 +54,15 @@ struct MovieListViewModelTests {
         repo.result = .failure(APIError.invalidResponse)
         
         let useCase = FetchMoviesUseCase(repository: repo)
+        let networkMonitor = MockNetworkMonitor()
+        
+        let networkState = await MainActor.run {
+            NetworkState(monitor: networkMonitor)
+        }
         
         let vm = MovieListViewModel(
             useCase: useCase,
-            recentlyViewedUseCase: MockRecentlyViewedUseCase()
+            recentlyViewedUseCase: MockRecentlyViewedUseCase(), networkState: networkState
         )
         
         await vm.load()
@@ -71,9 +82,15 @@ struct MovieListViewModelTests {
             RecentlyViewedMovie(id: "101", title: "A", viewedAt: Date())
         ]
         
+        let networkMonitor = MockNetworkMonitor()
+        let networkState = await MainActor.run {
+            NetworkState(monitor: networkMonitor)
+        }
+        
         let vm = MovieListViewModel(
             useCase: FetchMoviesUseCase(repository: MockMovieRepository()),
-            recentlyViewedUseCase: recently
+            recentlyViewedUseCase: recently,
+            networkState: networkState
         )
         
         await vm.clearRecentlyViewed()

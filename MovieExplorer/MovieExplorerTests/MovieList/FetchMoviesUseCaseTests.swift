@@ -20,7 +20,7 @@ struct FetchMoviesUseCaseTests {
         ])
 
         let useCase = FetchMoviesUseCase(repository: repo)
-        let result = try await useCase.execute()
+        let result = try await useCase.execute(forceRefresh: false)
 
         #expect(result.count == 1)
         #expect(result.first?.title == "Test")
@@ -34,7 +34,7 @@ struct FetchMoviesUseCaseTests {
 
         let useCase = FetchMoviesUseCase(repository: repo)
         await #expect(throws: URLError.self) {
-            _ = try await useCase.execute()
+            _ = try await useCase.execute(forceRefresh: false)
         }
     }
 }

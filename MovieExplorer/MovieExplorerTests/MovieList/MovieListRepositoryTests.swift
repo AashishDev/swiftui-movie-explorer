@@ -19,7 +19,7 @@ struct MovieListRepositoryTests {
         ])
 
         let repository = MovieListRepository(remote: remote, local: MockLocalMoviesDataSource())
-        let result = try await repository.fetchMovies()
+        let result = try await repository.fetchMovies(forceRefresh: false)
 
         #expect(result.count == 1)
         #expect(result.first?.title == "a movie")

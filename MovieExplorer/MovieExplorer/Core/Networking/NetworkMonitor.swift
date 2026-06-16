@@ -1,6 +1,12 @@
 import Network
 
-actor NetworkMonitor {
+protocol NetworkMonitoring {
+    func start() async
+    func stop() async
+    func isConnected() async -> Bool
+}
+
+actor NetworkMonitor:NetworkMonitoring {
     private let monitor = NWPathMonitor()
     private let queue = DispatchQueue(label: "network.monitor")
     private var currentStatus = false
