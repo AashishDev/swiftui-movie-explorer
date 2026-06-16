@@ -15,11 +15,15 @@ final class AppContainer {
     let router = Router()
     private let modelContext: ModelContext
     private let apiService: APIServiceProtocol
+    let networkState: NetworkState
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
         self.apiService = APIServiceLogger(
             decoratee: APIService()
+        )
+        self.networkState = NetworkState(
+            monitor: NetworkMonitor()
         )
     }
 
@@ -30,7 +34,8 @@ final class AppContainer {
 
         return MovieListViewModel(
             useCase: movieUseCase,
-            recentlyViewedUseCase: recentlyViewedUseCase
+            recentlyViewedUseCase: recentlyViewedUseCase,
+            networkState: networkState
         )
     }
 

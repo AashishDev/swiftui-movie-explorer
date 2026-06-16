@@ -1,35 +1,30 @@
-//
-//  NetworkMonitor.swift
-//  MovieExplorer
-//
-//  Created by Aashish Tyagi on 6/16/26.
-//
-
 import Network
-import Observation
 
-@MainActor
-@Observable
-final class NetworkMonitor {
-    static let shared = NetworkMonitor()
+actor NetworkMonitor {
     private let monitor = NWPathMonitor()
-    private let queue = DispatchQueue(label: "NetworkMonitor")
-    var isConnected: Bool = false
-
-    private init() {
-        start()
-    }
-
-    private func start() {
+    private let queue = DispatchQueue(label: "network.monitor")
+    private var currentStatus = false
+    
+    func start() {
         monitor.pathUpdateHandler = { [weak self] path in
-            guard let self else { return }
-            let status = path.status == .satisfied
-
-            Task { @MainActor in
-                print("Network changed:", status)
-                self.isConnected = status
+            Task {
+                await self?.update(
+                    path.status == .satisfied
+                )
             }
         }
         monitor.start(queue: queue)
+    }
+    
+    private func update(_ value: Bool) {
+        currentStatus = value
+    }
+    
+    func isConnected() -> Bool {
+        currentStatus
+    }
+    
+    func stop() {
+        monitor.cancel()
     }
 }

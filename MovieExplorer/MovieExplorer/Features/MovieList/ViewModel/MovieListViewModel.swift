@@ -16,23 +16,26 @@ enum MovieListState:Equatable {
 @MainActor
 @Observable
 final class MovieListViewModel {
-    
-    private let network = NetworkMonitor.shared
     private(set) var state: MovieListState = .idle
     var isRefreshing = false
     private(set) var recentlyViewed: [RecentlyViewedMovie] = []
     var refreshErrorMessage: String?
-    
+
     private let useCase: FetchMoviesUseCase
     private let recentlyViewedUseCase: RecentlyViewedUseCaseProtocol
-    
+    private let networkState: NetworkState
+
     init(useCase: FetchMoviesUseCase,
-         recentlyViewedUseCase: RecentlyViewedUseCaseProtocol) {
+         recentlyViewedUseCase: RecentlyViewedUseCaseProtocol,
+         networkState: NetworkState) {
         self.useCase = useCase
         self.recentlyViewedUseCase = recentlyViewedUseCase
+        self.networkState = networkState
+
     }
     
     func load() async {
+        
         state = .loading
         do {
             let movies =  try await useCase.execute(forceRefresh:false)
@@ -50,27 +53,27 @@ final class MovieListViewModel {
     func refresh() async {
         isRefreshing = true
         defer { isRefreshing = false }
-        guard NetworkMonitor.shared.isConnected  else {
+        
+        let connected = await networkState.monitor.isConnected()
+        guard connected  else {
             refreshErrorMessage = APIError.networkUnavailable.message
             Task {
-                try? await Task.sleep(nanoseconds: 2_000_000_000)
+                try? await Task.sleep(for:.seconds(2))
                 await MainActor.run {
                     self.refreshErrorMessage = nil
                 }
             }
            return
         }
+        
         do {
-            try? await Task.sleep(nanoseconds: 800_000_000)
+            try? await Task.sleep(for:.milliseconds(800))
             let movies =  try await useCase.execute(forceRefresh:true)
             state =  .loaded(movies)
             await loadRecentlyViewed()
         }
-        catch let apiError as APIError {
-            state =  .error(apiError)
-        }
         catch {
-            state =  .error(APIError.serverError(error))
+            print(error)
         }
     }
 }

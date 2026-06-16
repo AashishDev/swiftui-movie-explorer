@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MovieCellView: View {
     let movie: Movie
+    let reloadID: UUID
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -33,6 +34,7 @@ struct MovieCellView: View {
                     EmptyView()
                 }
             }
+            .id(reloadID)
             .frame(width: 120, height: 120)
             .clipShape(RoundedRectangle(cornerRadius: 8))
 

@@ -9,16 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct RootView: View {
-
     @Environment(\.modelContext) private var modelContext
     @State private var container: AppContainer?
 
-    init() {
-          print("✅ RootView init")
-      }
-    
     var body: some View {
-
         Group {
             if let container {
                 MovieListView(
@@ -28,6 +22,7 @@ struct RootView: View {
             }
         }
         .task {
+            
             if container == nil {
                 container = AppContainer(
                     modelContext: modelContext

@@ -5,10 +5,13 @@
 //  Created by Aashish Tyagi on 6/13/26.
 //
 import SwiftUI
+import Combine
 
 struct MovieListView: View {
     @State var viewModel: MovieListViewModel
     @Environment(AppContainer.self) private var container
+    @State private var networkCancellable: AnyCancellable?
+    @State private var imageReloadID = UUID()
     
     var body: some View {
         @Bindable var router = container.router
@@ -25,6 +28,7 @@ struct MovieListView: View {
                 }
         }
         .refreshable {
+            imageReloadID = UUID()
             await viewModel.refresh()
         }
         .task {
@@ -38,6 +42,7 @@ struct MovieListView: View {
             }
         }
     }
+    
     
     // MARK: - Content
     @ViewBuilder
@@ -144,7 +149,7 @@ struct MovieListView: View {
                         .movieDetails(id: movie.id)
                     )
                 } label: {
-                    MovieCellView(movie: movie)
+                    MovieCellView(movie: movie, reloadID:imageReloadID)
                 }
                 .buttonStyle(.plain)
                 .padding(.horizontal)
